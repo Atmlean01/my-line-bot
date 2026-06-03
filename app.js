@@ -651,9 +651,9 @@ if (text.startsWith("ลบดำ ")) {
 
 if (text === "รายชื่อดำ") {
 
-  return reply(
-    replyToken,
-`🚫 BLACKLIST
+return reply(
+  replyToken,
+  `🚫 BLACKLIST
 
 ${group.blacklist.join("\n") || "ไม่มีบัญชีดำ"}`
   );
