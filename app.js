@@ -80,39 +80,9 @@ app.post("/webhook", async (req, res) => {
 
     // เมนู
     if (text === "เมนู") {
-      await reply(
-        replyToken,
-`🤖 เมนูบอท
-
-📊 ข้อมูล
-• สถานะ
-• เช็คเจ้าของ
-
-🛡️ ระบบป้องกัน
-• เปิดกันลิงก์
-• ปิดกันลิงก์
-
-👋 ระบบต้อนรับ
-• เปิดต้อนรับ
-• ปิดต้อนรับ
-
-👑 แอดมิน
-• ตั้งสูง UID
-• ตั้งกลาง UID
-• ตั้งล่าง UID
-• ลบแอดมิน UID
-• รายชื่อแอดมิน
-
-🚫 Blacklist
-• เพิ่มดำ UID
-• ลบดำ UID
-• รายชื่อดำ
-
-🔒 กลุ่ม
-• ล็อกกลุ่ม
-• ปลดล็อกกลุ่ม`
-      );
-    }
+  return replyFlex(replyToken);
+}
+  
 
     // สถานะ
     if (text === "สถานะ") {
@@ -413,26 +383,41 @@ ${group.admins.low.join("\n") || "-"}`
   res.sendStatus(200);
 });
 
-async function reply(
-  replyToken,
-  text
-) {
+async function replyFlex(replyToken) {
   await axios.post(
     "https://api.line.me/v2/bot/message/reply",
     {
       replyToken,
       messages: [
         {
-          type: "text",
-          text
+          type: "flex",
+          altText: "เมนูบอท",
+          contents: {
+            type: "bubble",
+            body: {
+              type: "box",
+              layout: "vertical",
+              contents: [
+                {
+                  type: "text",
+                  text: "🤖 BOT PROTECT",
+                  weight: "bold",
+                  size: "xl"
+                },
+                {
+                  type: "text",
+                  text: "👑 Owner : Atm Lean"
+                }
+              ]
+            }
+          }
         }
       ]
     },
     {
       headers: {
         Authorization: `Bearer ${TOKEN}`,
-        "Content-Type":
-          "application/json"
+        "Content-Type": "application/json"
       }
     }
   );
