@@ -653,7 +653,6 @@ if (text === "รายชื่อดำ") {
 
   return reply(
     replyToken,
-
 `🚫 BLACKLIST
 
 ${group.blacklist.join("\n") || "ไม่มีบัญชีดำ"}`
