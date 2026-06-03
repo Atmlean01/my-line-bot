@@ -1,9 +1,13 @@
 {
-  "name": "line-bot",
-  "version": "1.0.0",
+  "name": "atm-lean-bot-v2",
+  "version": "2.0.0",
+  "description": "ATM LEAN BOT V2",
   "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
   "dependencies": {
-    "express": "^4.18.2",
-    "axios": "^1.6.0"
+    "axios": "^1.8.4",
+    "express": "^4.21.2"
   }
 }
