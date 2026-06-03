@@ -656,7 +656,7 @@ return reply(
   `🚫 BLACKLIST
 
 ${group.blacklist.join("\n") || "ไม่มีบัญชีดำ"}`
-  );
+);
 }
 
   res.sendStatus(200);
