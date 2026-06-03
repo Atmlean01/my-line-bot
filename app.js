@@ -122,13 +122,19 @@ app.post("/webhook", async (req, res) => {
       );
     }
 
-    // เจ้าของ
-    if (text === "เช็คเจ้าของ") {
-      await reply(
-        replyToken,
-        `👑 เจ้าของ:\n${group.owner}`
-      );
-    }
+    // เช็คแอด
+if (text === "เช็คแอด") {
+  return reply(
+    replyToken,
+`╔════ 👑 OWNER 👑 ════╗
+
+👤 ชื่อ : Atm Lean
+🟢 สถานะ : Online
+👑 ระดับ : Owner
+
+╚══════════════════╝`
+  );
+}
 
     // เปิดกันลิงก์
     if (text === "เปิดกันลิงก์") {
