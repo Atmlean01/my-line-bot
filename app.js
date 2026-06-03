@@ -1,176 +1,439 @@
-const express = require('express')
-const axios = require('axios')
-const app = express()
+const express = require("express");
+const axios = require("axios");
 
-app.use(express.json())
+const app = express();
+app.use(express.json());
 
-const TOKEN = "fapd1GKA21TkpSGxhZtNryXL6MPpBL1/XcvWcDqRS0L6Sj044v6dJOreQpgfgOpHso1lGS0/tekAoKNZqReLzIaXSo0fqzetClOabzoHfddFB0P/fqWO5yBbEpKO6svvgzOYRO6KyIbL1L2BDSoR4gdB04t89/1O/w1cDnyilFU="
+const TOKEN = process.env.CHANNEL_ACCESS_TOKEN;
+const PORT = process.env.PORT || 3000;
 
-// ===== DATABASE =====
-let groups = {}
+let groups = {};
 
 function getGroup(id) {
   if (!groups[id]) {
     groups[id] = {
       antiLink: false,
+      welcome: false,
+      lock: false,
       owner: null,
+      blacklist: [],
       admins: {
-        high: [], // แอดมินระดับสูง
-        mid: [],  // แอดมินทั่วไป
-        low: []   // แอดมินระดับล่าง
+        high: [],
+        mid: [],
+        low: []
       }
-    }
+    };
   }
-  return groups[id]
+  return groups[id];
 }
 
-// ===== WEBHOOK =====
-app.post('/webhook', async (req, res) => {
-  const events = req.body.events
+app.post("/webhook", async (req, res) => {
+  const events = req.body.events || [];
 
-  for (let e of events) {
+  for (const e of events) {
 
-    if (e.type !== 'message') continue
+    if (e.type !== "message") continue;
+    if (e.message.type !== "text") continue;
 
-    const text = e.message.text
-    const replyToken = e.replyToken
-    const groupId = e.source.groupId || e.source.roomId
-    const userId = e.source.userId
+    const text = e.message.text.trim();
+    const replyToken = e.replyToken;
 
-    if (!groupId) continue
+    const groupId =
+      e.source.groupId ||
+      e.source.roomId;
 
-    const group = getGroup(groupId)
+    const userId = e.source.userId;
 
-    // ตั้ง owner ครั้งแรก
-    if (!group.owner) group.owner = userId
+    if (!groupId) continue;
 
-    const isOwner = userId === group.owner
-    const isHigh = group.admins.high.includes(userId)
-    const isMid = group.admins.mid.includes(userId)
-    const isLow = group.admins.low.includes(userId)
+    const group = getGroup(groupId);
 
-    const isAdmin = isOwner || isHigh || isMid || isLow
+    if (!group.owner)
+      group.owner = userId;
 
-    // ===== กันลิงก์ =====
-    if (group.antiLink && text.includes('http')) {
-      await reply(replyToken, '🚫 ห้ามส่งลิงก์')
-      continue
+    const isOwner =
+      userId === group.owner;
+
+    const isHigh =
+      group.admins.high.includes(userId);
+
+    const isMid =
+      group.admins.mid.includes(userId);
+
+    const isLow =
+      group.admins.low.includes(userId);
+
+    const isAdmin =
+      isOwner || isHigh || isMid || isLow;
+
+    // กันลิงก์
+    if (
+      group.antiLink &&
+      /(http|https):\/\//i.test(text)
+    ) {
+      await reply(
+        replyToken,
+        "🚫 ห้ามส่งลิงก์"
+      );
+      continue;
     }
 
-    // ===== สถานะ =====
-    if (text === 'สถานะ') {
-      await reply(replyToken, JSON.stringify(group))
+    // เมนู
+    if (text === "เมนู") {
+      await reply(
+        replyToken,
+`🤖 เมนูบอท
+
+📊 ข้อมูล
+• สถานะ
+• เช็คเจ้าของ
+
+🛡️ ระบบป้องกัน
+• เปิดกันลิงก์
+• ปิดกันลิงก์
+
+👋 ระบบต้อนรับ
+• เปิดต้อนรับ
+• ปิดต้อนรับ
+
+👑 แอดมิน
+• ตั้งสูง UID
+• ตั้งกลาง UID
+• ตั้งล่าง UID
+• ลบแอดมิน UID
+• รายชื่อแอดมิน
+
+🚫 Blacklist
+• เพิ่มดำ UID
+• ลบดำ UID
+• รายชื่อดำ
+
+🔒 กลุ่ม
+• ล็อกกลุ่ม
+• ปลดล็อกกลุ่ม`
+      );
     }
 
-    // ===== เปิด/ปิดกันลิงก์ =====
-    if (text === 'เปิดกันลิงก์') {
-      if (!isOwner && !isHigh) {
-        await reply(replyToken, '❌ เฉพาะเจ้าของ/แอดมินสูง')
-        continue
+    // สถานะ
+    if (text === "สถานะ") {
+      await reply(
+        replyToken,
+        JSON.stringify(group, null, 2)
+      );
+    }
+
+    // เจ้าของ
+    if (text === "เช็คเจ้าของ") {
+      await reply(
+        replyToken,
+        `👑 เจ้าของ:\n${group.owner}`
+      );
+    }
+
+    // เปิดกันลิงก์
+    if (text === "เปิดกันลิงก์") {
+      if (!isOwner && !isHigh)
+        return reply(
+          replyToken,
+          "❌ เฉพาะเจ้าของ/แอดสูง"
+        );
+
+      group.antiLink = true;
+
+      return reply(
+        replyToken,
+        "🔒 เปิดกันลิงก์แล้ว"
+      );
+    }
+
+    // ปิดกันลิงก์
+    if (text === "ปิดกันลิงก์") {
+      if (!isOwner && !isHigh)
+        return reply(
+          replyToken,
+          "❌ เฉพาะเจ้าของ/แอดสูง"
+        );
+
+      group.antiLink = false;
+
+      return reply(
+        replyToken,
+        "🔓 ปิดกันลิงก์แล้ว"
+      );
+    }
+
+    // เปิดต้อนรับ
+    if (text === "เปิดต้อนรับ") {
+      group.welcome = true;
+
+      return reply(
+        replyToken,
+        "👋 เปิดต้อนรับแล้ว"
+      );
+    }
+
+    // ปิดต้อนรับ
+    if (text === "ปิดต้อนรับ") {
+      group.welcome = false;
+
+      return reply(
+        replyToken,
+        "👋 ปิดต้อนรับแล้ว"
+      );
+    }
+
+    // ล็อกกลุ่ม
+    if (text === "ล็อกกลุ่ม") {
+      group.lock = true;
+
+      return reply(
+        replyToken,
+        "🔒 ล็อกกลุ่มแล้ว"
+      );
+    }
+
+    // ปลดล็อกกลุ่ม
+    if (text === "ปลดล็อกกลุ่ม") {
+      group.lock = false;
+
+      return reply(
+        replyToken,
+        "🔓 ปลดล็อกกลุ่มแล้ว"
+      );
+    }
+
+    // ตั้งสูง
+    if (text.startsWith("ตั้งสูง ")) {
+
+      if (!isOwner)
+        return reply(
+          replyToken,
+          "❌ เฉพาะเจ้าของ"
+        );
+
+      const target =
+        text.split(" ")[1];
+
+      if (
+        !group.admins.high.includes(
+          target
+        )
+      ) {
+        group.admins.high.push(
+          target
+        );
       }
-      group.antiLink = true
-      await reply(replyToken, '🔒 เปิดกันลิงก์แล้ว')
+
+      return reply(
+        replyToken,
+        "👑 ตั้งแอดมินสูงแล้ว"
+      );
     }
 
-    if (text === 'ปิดกันลิงก์') {
-      if (!isOwner && !isHigh) {
-        await reply(replyToken, '❌ เฉพาะเจ้าของ/แอดมินสูง')
-        continue
-      }
-      group.antiLink = false
-      await reply(replyToken, '🔓 ปิดกันลิงก์แล้ว')
-    }
+    // ตั้งกลาง
+    if (text.startsWith("ตั้งกลาง ")) {
 
-    // ===== ตั้งแอดมินระดับ =====
-    if (text.startsWith('ตั้งสูง')) {
-      if (!isOwner) return reply(replyToken, '❌ เฉพาะเจ้าของ')
+      if (!isOwner && !isHigh)
+        return reply(
+          replyToken,
+          "❌ เฉพาะแอดสูง"
+        );
 
-      const target = text.split(' ')[1]
-      group.admins.high.push(target)
+      const target =
+        text.split(" ")[1];
 
-      await reply(replyToken, '👑 ตั้งแอดมินสูงแล้ว')
-    }
-
-    if (text.startsWith('ตั้งกลาง')) {
-      if (!isOwner && !isHigh) return reply(replyToken, '❌ ต้องเป็นระดับสูง')
-
-      const target = text.split(' ')[1]
-      group.admins.mid.push(target)
-
-      await reply(replyToken, '⭐ ตั้งแอดมินกลางแล้ว')
-    }
-
-    if (text.startsWith('ตั้งล่าง')) {
-      if (!isOwner && !isHigh && !isMid) return reply(replyToken, '❌ ต้องเป็นระดับสูง/กลาง')
-
-      const target = text.split(' ')[1]
-      group.admins.low.push(target)
-
-      await reply(replyToken, '🔹 ตั้งแอดมินล่างแล้ว')
-    }
-
-    // ===== ลบแอดมิน =====
-    if (text.startsWith('ลบแอดมิน')) {
-      if (!isOwner) return reply(replyToken, '❌ เฉพาะเจ้าของ')
-
-      const target = text.split(' ')[1]
-
-      group.admins.high = group.admins.high.filter(a => a !== target)
-      group.admins.mid = group.admins.mid.filter(a => a !== target)
-      group.admins.low = group.admins.low.filter(a => a !== target)
-
-      await reply(replyToken, '🗑️ ลบแอดมินแล้ว')
-    }
-
-    // ===== เตะ =====
-    if (text.startsWith('เตะ')) {
-      if (!isAdmin) {
-        await reply(replyToken, '❌ เฉพาะแอดมิน')
-        continue
+      if (
+        !group.admins.mid.includes(
+          target
+        )
+      ) {
+        group.admins.mid.push(
+          target
+        );
       }
 
-      const target = text.split(' ')[1]
-      await kick(groupId, target)
-
-      await reply(replyToken, '👢 เตะแล้ว')
+      return reply(
+        replyToken,
+        "⭐ ตั้งแอดมินกลางแล้ว"
+      );
     }
 
+    // ตั้งล่าง
+    if (text.startsWith("ตั้งล่าง ")) {
+
+      if (
+        !isOwner &&
+        !isHigh &&
+        !isMid
+      )
+        return reply(
+          replyToken,
+          "❌ ไม่มีสิทธิ์"
+        );
+
+      const target =
+        text.split(" ")[1];
+
+      if (
+        !group.admins.low.includes(
+          target
+        )
+      ) {
+        group.admins.low.push(
+          target
+        );
+      }
+
+      return reply(
+        replyToken,
+        "🔹 ตั้งแอดมินล่างแล้ว"
+      );
+    }
+
+    // ลบแอดมิน
+    if (
+      text.startsWith(
+        "ลบแอดมิน "
+      )
+    ) {
+
+      if (!isOwner)
+        return reply(
+          replyToken,
+          "❌ เฉพาะเจ้าของ"
+        );
+
+      const target =
+        text.split(" ")[1];
+
+      group.admins.high =
+        group.admins.high.filter(
+          x => x !== target
+        );
+
+      group.admins.mid =
+        group.admins.mid.filter(
+          x => x !== target
+        );
+
+      group.admins.low =
+        group.admins.low.filter(
+          x => x !== target
+        );
+
+      return reply(
+        replyToken,
+        "🗑️ ลบแอดมินแล้ว"
+      );
+    }
+
+    // รายชื่อแอดมิน
+    if (
+      text ===
+      "รายชื่อแอดมิน"
+    ) {
+
+      return reply(
+        replyToken,
+`👑 สูง
+${group.admins.high.join("\n") || "-"}
+
+⭐ กลาง
+${group.admins.mid.join("\n") || "-"}
+
+🔹 ล่าง
+${group.admins.low.join("\n") || "-"}`
+      );
+    }
+
+    // เพิ่มดำ
+    if (
+      text.startsWith(
+        "เพิ่มดำ "
+      )
+    ) {
+
+      const target =
+        text.split(" ")[1];
+
+      if (
+        !group.blacklist.includes(
+          target
+        )
+      ) {
+        group.blacklist.push(
+          target
+        );
+      }
+
+      return reply(
+        replyToken,
+        "🚫 เพิ่มบัญชีดำแล้ว"
+      );
+    }
+
+    // ลบดำ
+    if (
+      text.startsWith(
+        "ลบดำ "
+      )
+    ) {
+
+      const target =
+        text.split(" ")[1];
+
+      group.blacklist =
+        group.blacklist.filter(
+          x => x !== target
+        );
+
+      return reply(
+        replyToken,
+        "✅ ลบบัญชีดำแล้ว"
+      );
+    }
+
+    // รายชื่อดำ
+    if (text === "รายชื่อดำ") {
+
+      return reply(
+        replyToken,
+        group.blacklist.join("\n") ||
+        "ไม่มีบัญชีดำ"
+      );
+    }
   }
 
-  res.sendStatus(200)
-})
+  res.sendStatus(200);
+});
 
-// ===== REPLY =====
-async function reply(replyToken, text) {
+async function reply(
+  replyToken,
+  text
+) {
   await axios.post(
-    'https://api.line.me/v2/bot/message/reply',
+    "https://api.line.me/v2/bot/message/reply",
     {
       replyToken,
-      messages: [{ type: 'text', text }]
+      messages: [
+        {
+          type: "text",
+          text
+        }
+      ]
     },
     {
       headers: {
         Authorization: `Bearer ${TOKEN}`,
-        'Content-Type': 'application/json'
+        "Content-Type":
+          "application/json"
       }
     }
-  )
+  );
 }
 
-// ===== KICK =====
-async function kick(groupId, userId) {
-  await axios.post(
-    `https://api.line.me/v2/bot/group/${groupId}/members/${userId}`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`
-      }
-    }
-  )
-}
-
-// ===== START =====
-app.listen(3000, () => {
-  console.log('🔥 BOT เทพขั้นสุดพร้อมใช้งาน')
-})
+app.listen(PORT, () => {
+  console.log(
+    "🔥 BOT ONLINE"
+  );
+});
