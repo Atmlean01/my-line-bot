@@ -103,7 +103,7 @@ async function replyFlex(replyToken) {
 
             hero: {
               type: "image",
-              url: "https://drive.google.com/uc?export=view&id=1b2jwE-kLt7ocv5Ei5ORBkQqjW-80ywrk",
+              url: "https://military-yellow-rxlrlgrd.edgeone.app/DF7357E4-7D20-42B8-86F7-1F46613A1302.png",
               size: "full",
               aspectMode: "cover",
               aspectRatio: "20:13"
