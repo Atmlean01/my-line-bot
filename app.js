@@ -167,14 +167,17 @@ console.log(
     const group =
       getGroup(groupId);
 
-    const isCreator =
-userId === group.creator;
+    const MASTER_ID =
+"Ucb2d323e3d729a46f20007a2553b49b3";
+
+const isCreator =
+userId === MASTER_ID;
 
 const isOwner =
-userId === group.creator ||
+isCreator ||
 group.owners.includes(userId);
 console.log("USER ID =", userId);
-console.log("CREATOR =", group.creator);
+console.log("MASTER =", MASTER_ID);
 console.log("OWNERS =", group.owners);
 console.log("IS OWNER =", isOwner);
 const isBuyer =
