@@ -57,8 +57,34 @@ async function getProfile(userId) {
 
     return userId;
   }
+  
 }
+async function getGroupName(groupId) {
 
+  try {
+
+    const res = await axios.get(
+      `https://api.line.me/v2/bot/group/${groupId}/summary`,
+      {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`
+        }
+      }
+    );
+
+    return res.data.groupName;
+
+  } catch (err) {
+
+    console.log(
+      "GROUP NAME ERROR",
+      err.response?.data || err.message
+    );
+
+    return "ไม่ทราบชื่อกลุ่ม";
+  }
+
+}
 function getGroup(groupId) {
 
   if (!groups[groupId]) {
@@ -392,13 +418,15 @@ const creatorName =
 group.creator
 ? await getProfile(group.creator)
 : "-";
+const groupName =
+await getGroupName(groupId);
 
 return reply(
 replyToken,
 `📊 GROUP INFO
 
-🆔 GROUP ID
-${groupId}
+🏠 ชื่อกลุ่ม
+${groupName}
 
 👑 Creator
 ${creatorName}
