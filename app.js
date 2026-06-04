@@ -123,6 +123,11 @@ app.post("/webhook", async (req, res) => {
 
     const text =
       event.message.text.trim();
+      
+      console.log(
+  "MESSAGE:",
+  JSON.stringify(event.message, null, 2)
+);
 
     const replyToken =
       event.replyToken;
@@ -133,6 +138,14 @@ app.post("/webhook", async (req, res) => {
 
     const userId =
       event.source.userId;
+      
+      const mentionees =
+  event.message.mention?.mentionees || [];
+
+console.log(
+  "MENTIONS:",
+  JSON.stringify(mentionees, null, 2)
+);
 
     if (!groupId) continue;
 
