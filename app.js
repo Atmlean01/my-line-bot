@@ -422,7 +422,7 @@ ${group.admins.length
 
     if (text.startsWith("เพิ่มดำ ")) {
 
-      if (!isAdmin) {
+      if (!isStaff) {
         return reply(
           replyToken,
           "❌ เฉพาะแอดมิน"
@@ -462,7 +462,7 @@ ${group.admins.length
 
     if (text.startsWith("ลบดำ ")) {
 
-      if (!isAdmin) {
+      if (!isStaff) {
         return reply(
           replyToken,
           "❌ เฉพาะแอดมิน"
@@ -516,7 +516,7 @@ ${group.blacklist.length
 
     if (text === "ล้างดำ") {
 
-      if (!isAdmin) {
+      if (!isStaff) {
 
         return reply(
           replyToken,
@@ -546,7 +546,7 @@ ${group.blacklist.length
       )
     ) {
 
-      if (!isAdmin) {
+      if (!isStaff) {
 
         return reply(
           replyToken,
@@ -592,7 +592,7 @@ ${group.blacklist.length
       )
     ) {
 
-      if (!isAdmin) {
+      if (!isStaff) {
 
         return reply(
           replyToken,
@@ -670,7 +670,7 @@ ${group.badwords.length
 
     if (text === "กันลิงก์ เปิด") {
 
-      if (!isAdmin) {
+      if (!isStaff) {
         return reply(
           replyToken,
           "❌ เฉพาะแอดมิน"
@@ -694,7 +694,7 @@ ${group.badwords.length
 
     if (text === "กันลิงก์ ปิด") {
 
-      if (!isAdmin) {
+      if (!isStaff) {
         return reply(
           replyToken,
           "❌ เฉพาะแอดมิน"
@@ -734,7 +734,7 @@ ${group.badwords.length
 
     if (text === "ต้อนรับ เปิด") {
 
-      if (!isAdmin) {
+      if (!isStaff) {
         return reply(
           replyToken,
           "❌ เฉพาะแอดมิน"
@@ -758,7 +758,7 @@ ${group.badwords.length
 
     if (text === "ต้อนรับ ปิด") {
 
-      if (!isAdmin) {
+      if (!isStaff) {
         return reply(
           replyToken,
           "❌ เฉพาะแอดมิน"
@@ -786,7 +786,7 @@ ${group.badwords.length
       )
     ) {
 
-      if (!isAdmin) {
+      if (!isStaff) {
         return reply(
           replyToken,
           "❌ เฉพาะแอดมิน"
@@ -829,7 +829,7 @@ ${group.badwords.length
 
     if (text === "คนออก เปิด") {
 
-      if (!isAdmin) {
+      if (!isStaff) {
         return reply(
           replyToken,
           "❌ เฉพาะแอดมิน"
@@ -853,7 +853,7 @@ ${group.badwords.length
 
     if (text === "คนออก ปิด") {
 
-      if (!isAdmin) {
+      if (!isStaff) {
         return reply(
           replyToken,
           "❌ เฉพาะแอดมิน"
@@ -881,7 +881,7 @@ ${group.badwords.length
       )
     ) {
 
-      if (!isAdmin) {
+      if (!isStaff) {
         return reply(
           replyToken,
           "❌ เฉพาะแอดมิน"
