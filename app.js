@@ -328,20 +328,17 @@ ${group.admins.length
 
       }
 
-      const target =
-        text.replace(
-          "เพิ่มแอด ",
-          ""
-        ).trim();
+      if (
+!mentionees.length
+) {
+return reply(
+replyToken,
+"❌ กรุณาแท็กสมาชิก"
+);
+}
 
-      if (!target) {
-
-        return reply(
-          replyToken,
-          "❌ กรุณาใส่ USER ID"
-        );
-
-      }
+const target =
+mentionees[0].userId;
 
       if (
         !group.admins.includes(
@@ -359,7 +356,9 @@ ${group.admins.length
 
       return reply(
         replyToken,
-        "✅ เพิ่มแอดมินแล้ว"
+        `✅ เพิ่มแอดมินแล้ว
+
+${target}`
       );
 
     }
