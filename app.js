@@ -563,7 +563,7 @@ const flexData = {
 
       {
         type: "text",
-        text: 👥 สมาชิกทั้งหมด : ${           group.owners.length +           group.admins.length +           group.buyers.length         },
+        text: `👥 สมาชิกทั้งหมด : ${           group.owners.length +           group.admins.length +           group.buyers.length         }`,
         color: "#00FF99",
         weight: "bold",
         margin: "md",
