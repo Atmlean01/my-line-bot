@@ -303,16 +303,25 @@ group.settings.leave ? "เปิด" : "ปิด"
     // OWNER
     // ======================
 
-    if (text === "เจ้าของกลุ่ม") {
+    if (text == "เจ้าของกลุ่ม") {
 
-      return reply(
-        replyToken,
-        `👑 OWNER ID
+  const ownerNames =
+    group.owners.length
+      ? await Promise.all(
+          group.owners.map(
+            id => getProfile(id)
+          )
+        )
+      : [];
 
-${group.owners.join(", ") || "-"}`
-      );
+  return reply(
+    replyToken,
+`👑 OWNER
 
-    }
+${ownerNames.join("\n") || "-"}`
+  );
+
+}
     // ======================
     // เช็คแอด
     // ======================
@@ -400,11 +409,9 @@ replyToken,
 );
 }
 
-const target =
-mentionees[0].userId;
+const target = mentionees[0].userId;
 
-const targetName =
-  await getProfile(target);
+const name = await getProfile(target);
 
       if (
         !group.admins.includes(
@@ -421,12 +428,11 @@ const targetName =
       }
 
       return reply(
-  replyToken,
-  `✅ เพิ่มแอดมินแล้ว
+replyToken,
+`✅ เพิ่มแอดมินแล้ว
 
-${targetName}`
+${name}`
 );
-
     }
 
     // ======================
@@ -444,11 +450,18 @@ ${targetName}`
 
       }
 
-      const target =
-        text.replace(
-          "ลบแอด ",
-          ""
-        ).trim();
+      if (!mentionees.length) {
+return reply(
+replyToken,
+"❌ กรุณาแท็กสมาชิก"
+);
+}
+
+const target =
+mentionees[0].userId;
+
+const name =
+await getProfile(target);
 
       group.admins =
         group.admins.filter(
@@ -458,9 +471,11 @@ ${targetName}`
       saveData();
 
       return reply(
-        replyToken,
-        "🗑️ ลบแอดมินแล้ว"
-      );
+replyToken,
+`🗑️ ลบแอดมินแล้ว
+
+${name}`
+);
 
     }
 
@@ -469,21 +484,30 @@ ${targetName}`
     // ======================
 
     if (
-      text ===
-      "รายชื่อแอดมิน"
-    ) {
+  text ===
+  "รายชื่อแอดมิน"
+) {
 
-      return reply(
-        replyToken,
+const adminNames =
+group.admins.length
+? await Promise.all(
+group.admins.map(
+id => getProfile(id)
+)
+)
+: [];
+
+return reply(
+replyToken,
 
 `⭐ ADMIN LIST
 
-${group.admins.length
-? group.admins.join("\n")
-: "ไม่มีแอดมิน"}`
-      );
+${adminNames.length
+? adminNames.join("\n")
+: "ไม่มี Admin"}`
+);
 
-    }
+}
     // ======================
     // เพิ่มดำ
     // ======================
@@ -497,11 +521,18 @@ ${group.admins.length
         );
       }
 
-      const target =
-        text.replace(
-          "เพิ่มดำ ",
-          ""
-        ).trim();
+      if (!mentionees.length) {
+return reply(
+replyToken,
+"❌ กรุณาแท็กสมาชิก"
+);
+}
+
+const target =
+mentionees[0].userId;
+
+const name =
+await getProfile(target);
 
       if (
         !group.blacklist.includes(
@@ -518,9 +549,11 @@ ${group.admins.length
       }
 
       return reply(
-        replyToken,
-        "🚫 เพิ่มบัญชีดำแล้ว"
-      );
+replyToken,
+`⛔ เพิ่มบัญชีดำแล้ว
+
+${name}`
+);
 
     }
 
@@ -537,11 +570,18 @@ ${group.admins.length
         );
       }
 
-      const target =
-        text.replace(
-          "ลบดำ ",
-          ""
-        ).trim();
+      if (!mentionees.length) {
+return reply(
+replyToken,
+"❌ กรุณาแท็กสมาชิก"
+);
+}
+
+const target =
+mentionees[0].userId;
+
+const name =
+await getProfile(target);
 
       group.blacklist =
         group.blacklist.filter(
@@ -551,9 +591,11 @@ ${group.admins.length
       saveData();
 
       return reply(
-        replyToken,
-        "✅ ลบบัญชีดำแล้ว"
-      );
+replyToken,
+`✅ ลบบัญชีดำแล้ว
+
+${name}`
+);
 
     }
 
@@ -562,22 +604,30 @@ ${group.admins.length
     // ======================
 
     if (
-      text === "เช็คดำ" ||
-      text === "รายชื่อดำ"
-    ) {
+text == "เช็คดำ" ||
+text == "รายชื่อดำ"
+) {
 
-      return reply(
-        replyToken,
+const blackNames =
+group.blacklist.length
+? await Promise.all(
+group.blacklist.map(
+id => getProfile(id)
+)
+)
+: [];
+
+return reply(
+replyToken,
 
 `🚫 BLACKLIST
 
-${group.blacklist.length
-? group.blacklist.join("\n")
+${blackNames.length
+? blackNames.join("\n")
 : "ไม่มีบัญชีดำ"}`
-      );
+);
 
-    }
-
+}
     // ======================
     // ล้างดำ
     // ======================
