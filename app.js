@@ -388,9 +388,24 @@ ${ownerNames.join("\n") || "-"}`
 
     if (text == "เช็คแอด") {
 
+if (!isOwner) {
+
+  return reply(
+
+    replyToken,
+
+    "❌ เฉพาะ Owner เท่านั้น"
+
+  );
+
+}
+
 const creatorName =
+
 group.creator
+
 ? await getProfile(group.creator)
+
 : "-";
 
 const ownerNames =
@@ -448,6 +463,13 @@ ${adminNames.length
 
 if (text === "ข้อมูลกลุ่ม") {
 
+if (!isOwner) {
+  return reply(
+    replyToken,
+    "❌ เฉพาะ Owner เท่านั้น"
+  );
+}
+
 const creatorName =
 group.creator
 ? await getProfile(group.creator)
@@ -457,72 +479,140 @@ await getGroupName(groupId);
 
 const flexData = {
   type: "bubble",
+
   hero: {
     type: "image",
     url: "https://military-yellow-rxlrlgrd.edgeone.app/DF7357E4-7D20-42B8-86F7-1F46613A1302.png",
     size: "full",
     aspectRatio: "16:9",
-aspectMode: "cover"
+    aspectMode: "cover"
   },
+
   body: {
     type: "box",
     layout: "vertical",
-    backgroundColor: "#1A001F",
+    backgroundColor: "#12001F",
     contents: [
-  {
-    type: "text",
-    text: "👑 ATM LEAN SYSTEM",
-    weight: "bold",
-    size: "lg",
-    color: "#A855F7",
-    align: "center"
+
+      {
+        type: "text",
+        text: "👑 ATM LEAN SYSTEM",
+        weight: "bold",
+        size: "lg",
+        color: "#E879F9",
+        align: "center"
+      },
+
+      {
+        type: "text",
+        text: groupName,
+        weight: "bold",
+        size: "xl",
+        color: "#FFFFFF",
+        align: "center",
+        margin: "md"
+      },
+
+      {
+        type: "separator",
+        margin: "lg",
+        color: "#A855F7"
+      },
+
+      {
+        type: "text",
+        text: 👑 Creator : ${creatorName},
+        color: "#FFCC00",
+        margin: "md",
+        weight: "bold"
+      },
+
+      {
+        type: "text",
+        text: 👑 Owner : ${group.owners.length},
+        color: "#FFD700",
+        weight: "bold"
+      },
+
+      {
+        type: "text",
+        text: ⭐ Admin : ${group.admins.length},
+        color: "#00FFFF",
+        weight: "bold"
+      },
+
+      {
+        type: "text",
+        text: 💎 Buyer : ${group.buyers.length},
+        color: "#66CCFF",
+        weight: "bold"
+      },
+
+      {
+        type: "text",
+        text: 🚫 Blacklist : ${group.blacklist.length},
+        color: "#FF6666",
+        weight: "bold"
+      },
+
+      {
+        type: "separator",
+        margin: "lg",
+        color: "#A855F7"
+      },
+
+      {
+        type: "text",
+        text: 👥 สมาชิกทั้งหมด : ${           group.owners.length +           group.admins.length +           group.buyers.length         },
+        color: "#00FF99",
+        weight: "bold",
+        margin: "md",
+        size: "md"
+      }
+    ]
   },
 
-  {
-  type: "text",
-  text: groupName,
-  weight: "bold",
-  size: "xl",
-  color: "#FFFFFF",
-  align: "center" 
-},
+  footer: {
+    type: "box",
+    layout: "vertical",
+    spacing: "sm",
+    backgroundColor: "#0A0015",
+    contents: [
 
-{
-  type: "separator",
-  margin: "lg",
-  color: "#A855F7"
-},
       {
-        type: "text",
-        text: `👑 Creator : ${creatorName}`,
-        color: "#FFFFFF"
+        type: "button",
+        style: "primary",
+        color: "#A855F7",
+        action: {
+          type: "message",
+          label: "👑 เช็คแอด",
+          text: "เช็คแอด"
+        }
       },
+
       {
-        type: "text",
-        text: `👑 Owner : ${group.owners.length}`,
-        color: "#FFFFFF"
+        type: "button",
+        style: "primary",
+        color: "#9333EA",
+        action: {
+          type: "message",
+          label: "🏠 รายชื่อห้อง",
+          text: "รายชื่อห้อง"
+        }
       },
+
       {
-        type: "text",
-        text: `⭐ Admin : ${group.admins.length}`,
-        color: "#FFFFFF"
-      },
-      {
-        type: "text",
-        text: `💎 Buyer : ${group.buyers.length}`,
-        color: "#FFFFFF"
-      },
-      {
-  type: "text",
-  text: `👥 สมาชิกทั้งหมด : ${
-    group.owners.length +
-    group.admins.length +
-    group.buyers.length
-  }`,
-  color: "#FFFFFF"
+        type: "button",
+        style: "primary",
+        color: "#7C3AED",
+        action: {
+          type: "message",
+          label: "📦 จำนวนห้อง",
+          text: "จำนวนห้อง"
+      }
+    }
+  ]
 }
-    ]
-  }
 };
 
 return replyFlex(
