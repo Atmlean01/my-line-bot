@@ -382,8 +382,77 @@ ${adminNames.length
 );
 
 }
+// ====================
+// ข้อมูลกลุ่ม
+// ====================
 
+if (text === "ข้อมูลกลุ่ม") {
 
+const creatorName =
+group.creator
+? await getProfile(group.creator)
+: "-";
+
+return reply(
+replyToken,
+`📊 GROUP INFO
+
+🆔 GROUP ID
+${groupId}
+
+👑 Creator
+${creatorName}
+
+👑 Owner
+${group.owners.length} คน
+
+⭐ Admin
+${group.admins.length} คน
+
+💎 Buyer
+${group.buyers.length} คน
+
+🚫 Blacklist
+${group.blacklist.length} คน`
+);
+
+}
+if (text === "จำนวนห้อง") {
+
+const totalGroups =
+Object.keys(groups).length;
+
+let ownerCount = 0;
+let adminCount = 0;
+let buyerCount = 0;
+
+for (const id in groups) {
+
+ownerCount +=
+groups[id].owners.length;
+
+adminCount +=
+groups[id].admins.length;
+
+buyerCount +=
+groups[id].buyers.length;
+
+}
+
+return reply(
+replyToken,
+`🏠 BOT STATUS
+
+📦 กลุ่มทั้งหมด : ${totalGroups}
+
+👑 Owner : ${ownerCount}
+
+⭐ Admin : ${adminCount}
+
+💎 Buyer : ${buyerCount}`
+);
+
+}
     // ======================
     // เพิ่มแอด
     // เพิ่มแอด USERID
