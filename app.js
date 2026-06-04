@@ -176,7 +176,10 @@ userId === group.creator;
 const isOwner =
 userId === group.creator ||
 group.owners.includes(userId);
-
+console.log("USER ID =", userId);
+console.log("CREATOR =", group.creator);
+console.log("OWNERS =", group.owners);
+console.log("IS OWNER =", isOwner);
 const isBuyer =
 group.buyers.includes(userId);
 
