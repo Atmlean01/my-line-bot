@@ -174,6 +174,7 @@ console.log(
 userId === group.creator;
 
 const isOwner =
+userId === group.creator ||
 group.owners.includes(userId);
 
 const isBuyer =
