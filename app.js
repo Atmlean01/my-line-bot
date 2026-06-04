@@ -142,7 +142,7 @@ app.post("/webhook", async (req, res) => {
 
     const userId =
       event.source.userId;
-      
+      console.log("USER ID =", userId);
       const mentionees =
   event.message.mention?.mentionees || [];
 
