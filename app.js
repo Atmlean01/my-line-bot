@@ -286,24 +286,28 @@ ${group.owners.join(", ") || "-"}`
     // ======================
 
     if (text === "เช็คแอด") {
- 
-
   return reply(
     replyToken,
-    `👑 OWNER
+`👑 CREATOR
+${group.creator || "-"}
 
-${group.owners.join(", ") || "-"}
+👑 OWNER
+${group.owners.length
+? group.owners.join("\n")
+: "ไม่มี Owner"}
+
+💎 BUYER
+${group.buyers.length
+? group.buyers.join("\n")
+: "ไม่มี Buyer"}
 
 ⭐ ADMINS
-
-${
-  group.admins.length > 0
-    ? group.admins.join("\n")
-    : "ไม่มีแอดมิน"
-}`
+${group.admins.length
+? group.admins.join("\n")
+: "ไม่มี Admin"}`
   );
+}
 
-} 
 
     // ======================
     // เพิ่มแอด
