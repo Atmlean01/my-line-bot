@@ -521,7 +521,7 @@ const flexData = {
 
       {
         type: "text",
-        text: 👑 Creator : ${creatorName},
+        text: `👑 Creator : ${creatorName}`,
         color: "#FFCC00",
         margin: "md",
         weight: "bold"
