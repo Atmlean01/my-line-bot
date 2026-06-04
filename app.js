@@ -160,6 +160,40 @@ async function reply(replyToken, text) {
 
   }
 }
+async function replyFlex(replyToken, flex) {
+
+  try {
+
+    await axios.post(
+      "https://api.line.me/v2/bot/message/reply",
+      {
+        replyToken,
+        messages: [
+          {
+            type: "flex",
+            altText: "ATM API BOT",
+            contents: flex
+          }
+        ]
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+  } catch (err) {
+
+    console.log(
+      "FLEX ERROR",
+      err.response?.data || err.message
+    );
+
+  }
+
+}
 // ======================
 // WEBHOOK
 // ======================
@@ -421,27 +455,54 @@ group.creator
 const groupName =
 await getGroupName(groupId);
 
-return reply(
-replyToken,
-`📊 GROUP INFO
+const flexData = {
+  type: "bubble",
+  hero: {
+    type: "image",
+    url: "https://military-yellow-rxlrlgrd.edgeone.app/DF7357E4-7D20-42B8-86F7-1F46613A1302.png",
+    size: "full",
+    aspectRatio: "1:1",
+    aspectMode: "cover"
+  },
+  body: {
+    type: "box",
+    layout: "vertical",
+    backgroundColor: "#1A001F",
+    contents: [
+      {
+        type: "text",
+        text: groupName,
+        weight: "bold",
+        size: "xl",
+        color: "#A855F7"
+      },
+      {
+        type: "text",
+        text: `👑 Creator : ${creatorName}`,
+        color: "#FFFFFF"
+      },
+      {
+        type: "text",
+        text: `👑 Owner : ${group.owners.length}`,
+        color: "#FFFFFF"
+      },
+      {
+        type: "text",
+        text: `⭐ Admin : ${group.admins.length}`,
+        color: "#FFFFFF"
+      },
+      {
+        type: "text",
+        text: `💎 Buyer : ${group.buyers.length}`,
+        color: "#FFFFFF"
+      }
+    ]
+  }
+};
 
-🏠 ชื่อกลุ่ม
-${groupName}
-
-👑 Creator
-${creatorName}
-
-👑 Owner
-${group.owners.length} คน
-
-⭐ Admin
-${group.admins.length} คน
-
-💎 Buyer
-${group.buyers.length} คน
-
-🚫 Blacklist
-${group.blacklist.length} คน`
+return replyFlex(
+  replyToken,
+  flexData
 );
 
 }
@@ -478,6 +539,32 @@ replyToken,
 ⭐ Admin : ${adminCount}
 
 💎 Buyer : ${buyerCount}`
+);
+
+}
+if (text === "รายชื่อห้อง") {
+
+let roomList = [];
+let no = 1;
+
+for (const groupId in groups) {
+
+const groupName =
+await getGroupName(groupId);
+
+roomList.push(
+`${no}. ${groupName}`
+);
+
+no++;
+
+}
+
+return reply(
+replyToken,
+`🏠 ห้องทั้งหมด ${roomList.length} ห้อง
+
+${roomList.join("\n")}`
 );
 
 }
