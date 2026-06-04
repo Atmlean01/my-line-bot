@@ -461,7 +461,7 @@ const flexData = {
     type: "image",
     url: "https://military-yellow-rxlrlgrd.edgeone.app/DF7357E4-7D20-42B8-86F7-1F46613A1302.png",
     size: "full",
-    aspectRatio: "20:13",
+    aspectRatio: "16:9",
 aspectMode: "cover"
   },
   body: {
@@ -471,7 +471,7 @@ aspectMode: "cover"
     contents: [
   {
     type: "text",
-    text: "ATM API BOT",
+    text: "👑 ATM LEAN SYSTEM",
     weight: "bold",
     size: "lg",
     color: "#A855F7",
@@ -511,7 +511,16 @@ aspectMode: "cover"
         type: "text",
         text: `💎 Buyer : ${group.buyers.length}`,
         color: "#FFFFFF"
-      }
+      },
+      {
+  type: "text",
+  text: `👥 สมาชิกทั้งหมด : ${
+    group.owners.length +
+    group.admins.length +
+    group.buyers.length
+  }`,
+  color: "#FFFFFF"
+}
     ]
   }
 };
