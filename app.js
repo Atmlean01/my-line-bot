@@ -622,7 +622,12 @@ return replyFlex(
 
 }
 if (text === "จำนวนห้อง") {
-
+if (!isOwner) {
+  return reply(
+    replyToken,
+    "❌ เฉพาะ Owner เท่านั้น"
+  );
+}
 const totalGroups =
 Object.keys(groups).length;
 
@@ -658,7 +663,12 @@ replyToken,
 
 }
 if (text === "รายชื่อห้อง") {
-
+if (!isOwner) {
+  return reply(
+    replyToken,
+    "❌ เฉพาะ Owner เท่านั้น"
+  );
+}
 let roomList = [];
 let no = 1;
 
