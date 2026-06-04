@@ -495,14 +495,28 @@ const flexData = {
     contents: [
 
       {
-        type: "text",
-        text: "👑 ATM LEAN SYSTEM",
-        weight: "bold",
-        size: "lg",
-        color: "#E879F9",
-        align: "center"
-      },
-
+  type: "text",
+  text: "✦ ATM LEAN SYSTEM ✦",
+  weight: "bold",
+  size: "xl",
+  color: "#FF66FF",
+  align: "center"
+},
+{
+  type: "text",
+  text: "OWNER CONTROL PANEL",
+  size: "xs",
+  color: "#66FFFF",
+  align: "center"
+},
+{
+  type: "text",
+  text: `⚡ Uptime : ${process.uptime().toFixed(0)} วินาที`,
+  color: "#00FFFF",
+  size: "sm",
+  align: "center",
+  margin: "sm"
+},
       {
         type: "text",
         text: groupName,
@@ -529,7 +543,7 @@ const flexData = {
 
       {
         type: "text",
-        text: `👑 Owner : ${group.owners.length}`,
+        text: `👑 Owner : ${group.owners.length} คน`,
         color: "#FFD700",
         weight: "bold"
       },
@@ -609,7 +623,18 @@ const flexData = {
           type: "message",
           label: "📦 จำนวนห้อง",
           text: "จำนวนห้อง"
-      }
+          }
+      },
+      
+          {
+  type: "button",
+  style: "primary",
+  color: "#00CC99",
+  action: {
+    type: "message",
+    label: "🔄 รีเฟรช",
+    text: "ข้อมูลกลุ่ม"
+      } 
     }
   ]
 }
