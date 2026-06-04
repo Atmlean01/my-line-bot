@@ -461,21 +461,37 @@ const flexData = {
     type: "image",
     url: "https://military-yellow-rxlrlgrd.edgeone.app/DF7357E4-7D20-42B8-86F7-1F46613A1302.png",
     size: "full",
-    aspectRatio: "1:1",
-    aspectMode: "cover"
+    aspectRatio: "20:13",
+aspectMode: "cover"
   },
   body: {
     type: "box",
     layout: "vertical",
     backgroundColor: "#1A001F",
     contents: [
-      {
-        type: "text",
-        text: groupName,
-        weight: "bold",
-        size: "xl",
-        color: "#A855F7"
-      },
+  {
+    type: "text",
+    text: "ATM API BOT",
+    weight: "bold",
+    size: "lg",
+    color: "#A855F7",
+    align: "center"
+  },
+
+  {
+  type: "text",
+  text: groupName,
+  weight: "bold",
+  size: "xl",
+  color: "#FFFFFF",
+  align: "center" 
+},
+
+{
+  type: "separator",
+  margin: "lg",
+  color: "#A855F7"
+},
       {
         type: "text",
         text: `👑 Creator : ${creatorName}`,
