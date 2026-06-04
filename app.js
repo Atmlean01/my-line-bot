@@ -35,8 +35,7 @@ function getGroup(groupId) {
   if (!groups[groupId]) {
 
     groups[groupId] = {
-  creator: "U8c38960ba9db492c491740c19fa361e5
-",
+  creator: "Ucb2d323e3d729a46f20007a2553b49b3",
   owners: [
     "U8c38960ba9db492c491740c19fa361e5"
   ],
