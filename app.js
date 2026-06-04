@@ -36,11 +36,15 @@ function getGroup(groupId) {
 
     groups[groupId] = {
 
-      owner: null,
+      creator: "",
 
-      admins: [],
+owners: [],
 
-      blacklist: [],
+buyers: [],
+
+admins: [],
+
+blacklist: [],
 
       badwords: [],
 
@@ -142,6 +146,20 @@ app.post("/webhook", async (req, res) => {
       const mentionees =
   event.message.mention?.mentionees || [];
 
+// หา USER ID
+
+if (text === "myid") {
+
+  return reply(
+
+    replyToken,
+
+    `USER ID : ${userId}`
+
+  );
+
+}
+
 console.log(
   "MENTIONS:",
   JSON.stringify(mentionees, null, 2)
@@ -152,20 +170,23 @@ console.log(
     const group =
       getGroup(groupId);
 
-    if (!group.owner) {
+    const isCreator =
+userId === group.creator;
 
-      group.owner = userId;
+const isOwner =
+group.owners.includes(userId);
 
-      saveData();
+const isBuyer =
+group.buyers.includes(userId);
 
-    }
+const isAdmin =
+group.admins.includes(userId);
 
-    const isOwner =
-      userId === group.owner;
-
-    const isAdmin =
-      isOwner ||
-      group.admins.includes(userId);
+const isStaff =
+isCreator ||
+isOwner ||
+isBuyer ||
+isAdmin;
 
     // ======================
     // ออน
@@ -192,8 +213,13 @@ console.log(
         replyToken,
         `🤖 ATM LEAN BOT V2
 
-👑 Owner : ATM LEAN
-🟢 Status : ONLINE`
+👑 Creator : ATM.API BOT
+🟢 Status : ONLINE
+
+📊 Staff System
+👑 Owner : ${group.owners.length}
+💎 Buyer : ${group.buyers.length}
+🛡 Admin : ${group.admins.length}`
       );
 
     }
@@ -250,7 +276,7 @@ group.settings.leave ? "เปิด" : "ปิด"
         replyToken,
         `👑 OWNER ID
 
-${group.owner}`
+${group.owners.join(", ") || "-"}
       );
 
     }
@@ -265,7 +291,7 @@ ${group.owner}`
 
 `👑 OWNER
 
-${group.owner || "-"}
+${group.owners.join(", ") || "-"}
 
 ⭐ ADMINS
 
