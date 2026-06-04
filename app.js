@@ -529,28 +529,28 @@ const flexData = {
 
       {
         type: "text",
-        text: 👑 Owner : ${group.owners.length},
+        text: `👑 Owner : ${group.owners.length}`,
         color: "#FFD700",
         weight: "bold"
       },
 
       {
         type: "text",
-        text: ⭐ Admin : ${group.admins.length},
+        text: `⭐ Admin : ${group.admins.length}`,
         color: "#00FFFF",
         weight: "bold"
       },
 
       {
         type: "text",
-        text: 💎 Buyer : ${group.buyers.length},
+        text: `💎 Buyer : ${group.buyers.length}`,
         color: "#66CCFF",
         weight: "bold"
       },
 
       {
         type: "text",
-        text: 🚫 Blacklist : ${group.blacklist.length},
+        text: `🚫 Blacklist : ${group.blacklist.length}`,
         color: "#FF6666",
         weight: "bold"
       },
