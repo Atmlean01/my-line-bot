@@ -23,11 +23,40 @@ try {
   groups = {};
 }
 
-function saveData() {
-  fs.writeFileSync(
-    "groups.json",
-    JSON.stringify(groups, null, 2)
-  );
+ function saveData() {
+   fs.writeFileSync(
+     "groups.json",
+     JSON.stringify(groups, null, 2)
+   );
+ }
+
+// ======================
+// GET PROFILE
+// ======================
+
+async function getProfile(userId) {
+  try {
+
+    const res = await axios.get(
+      `https://api.line.me/v2/bot/profile/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`
+        }
+      }
+    );
+
+    return res.data.displayName;
+
+  } catch (err) {
+
+    console.log(
+      "PROFILE ERROR",
+      userId
+    );
+
+    return userId;
+  }
 }
 
 function getGroup(groupId) {
@@ -288,27 +317,61 @@ ${group.owners.join(", ") || "-"}`
     // เช็คแอด
     // ======================
 
-    if (text === "เช็คแอด") {
-  return reply(
-    replyToken,
+    if (text == "เช็คแอด") {
+
+const creatorName =
+group.creator
+? await getProfile(group.creator)
+: "-";
+
+const ownerNames =
+group.owners.length
+? await Promise.all(
+group.owners.map(
+id => getProfile(id)
+)
+)
+: [];
+
+const buyerNames =
+group.buyers.length
+? await Promise.all(
+group.buyers.map(
+id => getProfile(id)
+)
+)
+: [];
+
+const adminNames =
+group.admins.length
+? await Promise.all(
+group.admins.map(
+id => getProfile(id)
+)
+)
+: [];
+
+return reply(
+replyToken,
 `👑 CREATOR
-${group.creator || "-"}
+${creatorName}
 
 👑 OWNER
-${group.owners.length
-? group.owners.join("\n")
+${ownerNames.length
+? ownerNames.join("\n")
 : "ไม่มี Owner"}
 
 💎 BUYER
-${group.buyers.length
-? group.buyers.join("\n")
+${buyerNames.length
+? buyerNames.join("\n")
 : "ไม่มี Buyer"}
 
 ⭐ ADMINS
-${group.admins.length
-? group.admins.join("\n")
+${adminNames.length
+? adminNames.join("\n")
 : "ไม่มี Admin"}`
-  );
+);
+
 }
 
 
@@ -340,6 +403,9 @@ replyToken,
 const target =
 mentionees[0].userId;
 
+const targetName =
+  await getProfile(target);
+
       if (
         !group.admins.includes(
           target
@@ -355,11 +421,11 @@ mentionees[0].userId;
       }
 
       return reply(
-        replyToken,
-        `✅ เพิ่มแอดมินแล้ว
+  replyToken,
+  `✅ เพิ่มแอดมินแล้ว
 
-${target}`
-      );
+${targetName}`
+);
 
     }
 
