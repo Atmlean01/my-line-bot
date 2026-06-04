@@ -276,7 +276,7 @@ group.settings.leave ? "เปิด" : "ปิด"
         replyToken,
         `👑 OWNER ID
 
-${group.owners.join(", ") || "-"}
+${group.owners.join(", ") || "-"}`
       );
 
     }
@@ -285,22 +285,24 @@ ${group.owners.join(", ") || "-"}
     // ======================
 
     if (text === "เช็คแอด") {
+ 
 
-      return reply(
-        replyToken,
-
-`👑 OWNER
+  return reply(
+    replyToken,
+    `👑 OWNER
 
 ${group.owners.join(", ") || "-"}
 
 ⭐ ADMINS
 
-${group.admins.length > 0
-  ? group.admins.join("\n")
-  : "ไม่มีแอดมิน"}`
-      );
+${
+  group.admins.length > 0
+    ? group.admins.join("\n")
+    : "ไม่มีแอดมิน"
+}`
+  );
 
-    }
+} 
 
     // ======================
     // เพิ่มแอด
