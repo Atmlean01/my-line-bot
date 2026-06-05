@@ -440,7 +440,7 @@ if (
     ""
   );
 
-  let total = 0;
+  let urgentTotal = 0;
 
 for (const gid in groups) {
   await pushMessage(
@@ -448,13 +448,13 @@ for (const gid in groups) {
     `🚨 ประกาศด่วน ATM LEAN 🚨\n\n${msg}`
   );
 
-  total++;
+  urgentTotal++;
 }
 
 return reply(
   replyToken,
-  `✅ ส่งประกาศด่วนแล้ว ${total} ห้อง`
-);
+  `✅ ส่งประกาศด่วนแล้ว ${urgentTotal} ห้อง`
+ );
 }
     // ======================
     // OWNER
