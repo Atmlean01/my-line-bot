@@ -226,7 +226,7 @@ async function pushMessage(to, text) {
     console.log(err.response?.data || err.message);
   }
 }
-}
+
 // ======================
 // WEBHOOK
 // ======================
@@ -396,44 +396,44 @@ if (
   text.startsWith("ตั้งประกาศ ")
 ) {
 
-  if (!isCreator) {
-  return reply(
-    replyToken,
-    "❌ เฉพาะ MASTER เท่านั้น"
-  );
-}
+  if (!isOwner) {
+    return reply(
+      replyToken,
+      "❌ เฉพาะ OWNER เท่านั้น"
+    );
+  }
 
   const msg = text.replace(
     "ตั้งประกาศ ",
     ""
   );
-}
-let total = 0;
 
-for (const gid in groups) {
-  await pushMessage(
-    gid,
-    `📢 ประกาศ ATM LEAN\n\n${msg}`
-  );
+  let total = 0;
 
-  total++;
-}
+  for (const gid in groups) {
+    await pushMessage(
+      gid,
+      `📢 ประกาศ ATM LEAN\n\n${msg}`
+    );
+    total++;
+  }
 
   return reply(
-  replyToken,
-  `✅ ส่งประกาศแล้ว ${total} ห้อง`
-);
+    replyToken,
+    `✅ ส่งประกาศแล้ว ${total} ห้อง`
+  );
+}
 
 if (
   text.startsWith("ประกาศด่วน ")
 ) {
 
-  if (!isCreator) {
-  return reply(
-    replyToken,
-    "❌ เฉพาะ MASTER เท่านั้น"
-  );
-}
+  if (!isOwner) {
+    return reply(
+      replyToken,
+      "❌ เฉพาะ OWNER เท่านั้น"
+    );
+  }
 
   const msg = text.replace(
     "ประกาศด่วน ",
@@ -442,43 +442,20 @@ if (
 
   let urgentTotal = 0;
 
-for (const gid in groups) {
-  await pushMessage(
-    gid,
-    `🚨 ประกาศด่วน ATM LEAN 🚨\n\n${msg}`
-  );
-
-  urgentTotal++;
-}
-
-return reply(
-  replyToken,
-  `✅ ส่งประกาศด่วนแล้ว ${urgentTotal} ห้อง`
- );
-}
-    // ======================
-    // OWNER
-    // ======================
-
-    if (text == "เจ้าของกลุ่ม") {
-
-  const ownerNames =
-    group.owners.length
-      ? await Promise.all(
-          group.owners.map(
-            id => getProfile(id)
-          )
-        )
-      : [];
+  for (const gid in groups) {
+    await pushMessage(
+      gid,
+      `🚨 ประกาศด่วน ATM LEAN 🚨\n\n${msg}`
+    );
+    urgentTotal++;
+  }
 
   return reply(
     replyToken,
-`👑 OWNER
-
-${ownerNames.join("\n") || "-"}`
+    `✅ ส่งประกาศด่วนแล้ว ${urgentTotal} ห้อง`
   );
-
 }
+
     // ======================
     // เช็คแอด
     // ======================
