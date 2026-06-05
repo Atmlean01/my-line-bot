@@ -14,7 +14,8 @@ const TOKEN = process.env.CHANNEL_ACCESS_TOKEN;
 // ======================
 
 let groups = {};
-
+const profileCache = {};
+const groupNameCache = {};
 try {
   groups = JSON.parse(
     fs.readFileSync("groups.json", "utf8")
@@ -35,6 +36,11 @@ try {
 // ======================
 
 async function getProfile(userId) {
+
+  if (profileCache[userId]) {
+    return profileCache[userId];
+  }
+
   try {
 
     const res = await axios.get(
@@ -46,20 +52,22 @@ async function getProfile(userId) {
       }
     );
 
+    profileCache[userId] =
+      res.data.displayName;
+
     return res.data.displayName;
 
-  } catch (err) {
-
-    console.log(
-      "PROFILE ERROR",
-      userId
-    );
+  } catch {
 
     return userId;
+
   }
   
-}
 async function getGroupName(groupId) {
+
+  if (groupNameCache[groupId]) {
+    return groupNameCache[groupId];
+  }
 
   try {
 
@@ -72,16 +80,15 @@ async function getGroupName(groupId) {
       }
     );
 
+    groupNameCache[groupId] =
+      res.data.groupName;
+
     return res.data.groupName;
 
-  } catch (err) {
-
-    console.log(
-      "GROUP NAME ERROR",
-      err.response?.data || err.message
-    );
+  } catch {
 
     return "ไม่ทราบชื่อกลุ่ม";
+
   }
 
 }
@@ -199,6 +206,7 @@ async function replyFlex(replyToken, flex) {
 // ======================
 
 app.post("/webhook", async (req, res) => {
+const startTime = Date.now();
 
   const events = req.body.events || [];
 
@@ -1371,9 +1379,8 @@ ${group.badwords.length
     }
     }
 
-  res.sendStatus(200);
-
-});
+  console.log(`⚡ Response Time: ${Date.now() - startTime} ms`);
+res.sendStatus(200);
 
 // ======================
 // HOME
