@@ -1381,6 +1381,7 @@ ${group.badwords.length
 
   console.log(`⚡ Response Time: ${Date.now() - startTime} ms`);
 res.sendStatus(200);
+});
 
 // ======================
 // HOME
