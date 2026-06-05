@@ -183,7 +183,9 @@ async function replyFlex(replyToken, flex) {
             altText: "ATM API BOT",
             contents: flex
           }
-          
+        ]
+      },
+        
       {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
