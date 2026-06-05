@@ -194,7 +194,7 @@ async function replyFlex(replyToken, flex) {
       }
     );
 
-  } catch (err) {
+    } catch (err) {
 
     console.log(
       "FLEX ERROR",
@@ -202,6 +202,8 @@ async function replyFlex(replyToken, flex) {
     );
 
   }
+
+}
 async function pushMessage(to, text) {
   try {
     await axios.post(
@@ -1444,8 +1446,11 @@ ${group.badwords.length
 
     }
     
-  console.log(`⚡ Response Time: ${Date.now() - startTime} ms`);
+  } 
+
+console.log(`⚡ Response Time: ${Date.now() - startTime} ms`);
 res.sendStatus(200);
+
 });
 
 // ======================
