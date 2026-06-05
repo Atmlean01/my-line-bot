@@ -439,7 +439,7 @@ if (
     "ประกาศด่วน ",
     ""
   );
-}
+
   let total = 0;
 
 for (const gid in groups) {
