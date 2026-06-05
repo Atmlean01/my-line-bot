@@ -63,6 +63,8 @@ async function getProfile(userId) {
 
   }
   
+} 
+  
 async function getGroupName(groupId) {
 
   if (groupNameCache[groupId]) {
@@ -1378,7 +1380,6 @@ ${group.badwords.length
 
     }
     }
-
   console.log(`⚡ Response Time: ${Date.now() - startTime} ms`);
 res.sendStatus(200);
 });
