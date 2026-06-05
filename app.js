@@ -183,8 +183,7 @@ async function replyFlex(replyToken, flex) {
             altText: "ATM API BOT",
             contents: flex
           }
-        ]
-      },
+          
       {
         headers: {
           Authorization: `Bearer ${TOKEN}`,
@@ -201,7 +200,30 @@ async function replyFlex(replyToken, flex) {
     );
 
   }
-
+async function pushMessage(to, text) {
+  try {
+    await axios.post(
+      "https://api.line.me/v2/bot/message/push",
+      {
+        to,
+        messages: [
+          {
+            type: "text",
+            text
+          }
+        ]
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+  } catch (err) {
+    console.log(err.response?.data || err.message);
+  }
+}
 }
 // ======================
 // WEBHOOK
@@ -368,7 +390,70 @@ group.settings.leave ? "เปิด" : "ปิด"
       );
 
     }
+if (
+  text.startsWith("ตั้งประกาศ ")
+) {
 
+  if (!isCreator) {
+  return reply(
+    replyToken,
+    "❌ เฉพาะ MASTER เท่านั้น"
+  );
+}
+
+  const msg = text.replace(
+    "ตั้งประกาศ ",
+    ""
+  );
+}
+let total = 0;
+
+for (const gid in groups) {
+  await pushMessage(
+    gid,
+    `📢 ประกาศ ATM LEAN\n\n${msg}`
+  );
+
+  total++;
+}
+
+  return reply(
+  replyToken,
+  `✅ ส่งประกาศแล้ว ${total} ห้อง`
+);
+
+if (
+  text.startsWith("ประกาศด่วน ")
+) {
+
+  if (!isCreator) {
+  return reply(
+    replyToken,
+    "❌ เฉพาะ MASTER เท่านั้น"
+  );
+}
+
+  const msg = text.replace(
+    "ประกาศด่วน ",
+    ""
+  );
+}
+  let total = 0;
+
+for (const gid in groups) {
+  await pushMessage(
+    gid,
+    `🚨 ประกาศด่วน ATM LEAN 🚨\n\n${msg}`
+  );
+
+  total++;
+}
+
+return reply(
+  replyToken,
+  `✅ ส่งประกาศด่วนแล้ว ${total} ห้อง`
+);
+}
     // ======================
     // OWNER
     // ======================
