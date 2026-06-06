@@ -239,6 +239,16 @@ const startTime = Date.now();
   const events = req.body.events || [];
 
   for (const event of events) {
+  if (event.type === "join") {
+
+  const groupId =
+    event.source.groupId ||
+    event.source.roomId;
+
+  getGroup(groupId);
+
+  continue;
+}
 
     if (
       event.type !== "message" ||
