@@ -67,9 +67,6 @@ async function getProfile(userId) {
   
 async function getGroupName(groupId) {
 
-  if (groupNameCache[groupId]) {
-    return groupNameCache[groupId];
-  }
 
   try {
 
