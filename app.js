@@ -243,8 +243,8 @@ const startTime = Date.now();
     event.source.roomId;
 
   getGroup(groupId);
-
-  continue;
+saveData();
+continue;
 }
 
     if (
@@ -268,6 +268,7 @@ const startTime = Date.now();
     const groupId =
       event.source.groupId ||
       event.source.roomId;
+getGroup(groupId);
 
     const userId =
       event.source.userId;
