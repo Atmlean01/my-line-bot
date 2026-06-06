@@ -237,6 +237,8 @@ const startTime = Date.now();
 
   for (const event of events) {
   if (event.type === "join") {
+  console.log("JOIN EVENT");
+console.log(JSON.stringify(event, null, 2));
 
   const groupId =
     event.source.groupId ||
